@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-accent="gold">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Oikos Arete — A Register of Houses</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <template id="__bundler_thumbnail">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" fill="#1c1a17"/>
+      <g transform="translate(100 100)" fill="none" stroke="#c8a96a" stroke-width="3">
+        <path d="M-40 20 L0 -36 L40 20 Z"/>
+        <path d="M-40 20 L40 20 L40 40 L-40 40 Z"/>
+        <line x1="-22" y1="40" x2="-22" y2="20"/>
+        <line x1="22" y1="40" x2="22" y2="20"/>
+        <line x1="0" y1="40" x2="0" y2="-10"/>
+      </g>
+      <text x="100" y="170" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="14" fill="#c8a96a">Oikos Arete</text>
+    </svg>
+  </template>
+
+  <script>
+    (function(){
+      try {
+        
+        if (location.hash !== '#/admin') location.hash = '#/admin';
+      } catch(e){ console.warn(e); }
+    })();
+  </script>
+  </head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="data.jsx"></script>
+  <script type="text/babel" src="auth.jsx"></script>
+  <script type="text/babel" src="shared.jsx"></script>
+  <script type="text/babel" src="page-landing.jsx"></script>
+  <script type="text/babel" src="page-browse.jsx"></script>
+  <script type="text/babel" src="page-vendor.jsx"></script>
+  <script type="text/babel" src="page-lists.jsx"></script>
+  <script type="text/babel" src="page-admin.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>

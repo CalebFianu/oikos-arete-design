@@ -1,0 +1,197 @@
+// Landing page — editorial hero, value props, event-type selector
+
+const VALUES = [
+{ num: '01', title: 'An invited register.', body: 'Every vendor on the register is vetted across craft, discretion and reliability. We onboard fewer than six per quarter.' },
+{ num: '02', title: 'Discretion, by default.', body: 'Houses are presented in confidence. Names, addresses, and guest lists never circulate beyond the room.' },
+{ num: '03', title: 'Curated, not crowdsourced.', body: 'No paid ranking. No advertising slots. Order is editorial — weighed against craft, not budget.' },
+{ num: '04', title: 'A house, not a marketplace.', body: 'Concierge support is built in. We answer in hours, not days, and we will say no to a vendor on your behalf.' }];
+
+const MARQUEE_ITEMS = ['Planners', 'Kitchens', 'Florists', 'Photography', 'DJs & MCs', 'Mixology', 'Hair & Makeup'];
+
+// One copy of the marquee content (rendered twice for seamless loop)
+function MarqueeCopy() {
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 60, flexShrink: 0, paddingRight: 60 }}>
+      {MARQUEE_ITEMS.map((item, i) => (
+        <React.Fragment key={i}>
+          <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 28, color: 'var(--ink-2)' }}>{item}</span>
+          <span style={{ color: 'var(--accent)', fontSize: 18, lineHeight: 1 }}>✦</span>
+        </React.Fragment>
+      ))}
+    </span>
+  );
+}
+
+// Scroll-reveal hook: fires IntersectionObserver and adds .visible to trigger CSS animations
+function useScrollReveal() {
+  React.useEffect(() => {
+    const els = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
+function Landing({ navigate }) {
+  useScrollReveal();
+
+  return (
+    <main className="page-fade">
+      {/* HERO ─────────────────────────────────────────── */}
+      <section className="shell" style={{ paddingTop: 80, paddingBottom: 100 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 80, alignItems: 'end' }}>
+          <div>
+            <div className="eyebrow eyebrow-gold hero-anim" style={{ animationDelay: '0.15s', marginBottom: 32 }}>
+              — Volume I · The Register of Houses —
+            </div>
+            <h1 className="display hero-anim" style={{ animationDelay: '0.3s', fontSize: 'clamp(56px, 8vw, 124px)', margin: 0 }}>
+              The event<br />is<em> arranged.</em><br />
+              <span style={{ fontStyle: 'normal', letterSpacing: '-0.02em' }}>You,</span> <em>simply</em><br />
+              <span style={{ fontStyle: 'normal', letterSpacing: '-0.02em' }}>arrive.</span>
+            </h1>
+            <hr className="h-rule hero-anim" style={{ animationDelay: '0.5s', margin: '40px 0 28px', maxWidth: 460 }} />
+            <p className="hero-anim" style={{ animationDelay: '0.55s', fontSize: 17, lineHeight: 1.55, color: 'var(--ink-2)', maxWidth: 460, margin: 0 }}>
+              Oikos Arete is a private register of planners, kitchens, florists, and houses of music — composed for events held to a higher standard.
+            </p>
+            <div className="hero-anim" style={{ animationDelay: '0.7s', display: 'flex', gap: 16, marginTop: 40, flexWrap: 'wrap' }}>
+              <a href="#/browse" className="btn">
+                Open the Register <Icon name="arrow" size={14} />
+              </a>
+              <a href="#event-types" className="btn ghost">
+                Choose an Occasion
+              </a>
+            </div>
+          </div>
+
+          <aside className="hero-anim" style={{ animationDelay: '0.2s', display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <Tile colors={['#0E0E0C', '#A88A4A']} monogram="OA" style={{ aspectRatio: '4/5' }} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Tile colors={['#5C1A2B', '#A88A4A']} style={{ aspectRatio: '1/1' }} />
+              <Tile colors={['#1a1612', '#C9A95F']} style={{ aspectRatio: '1/1' }} />
+            </div>
+            <div style={{ borderTop: '0.5px solid var(--accent)', paddingTop: 14, fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ink-3)', display: 'flex', justifyContent: 'space-between' }}>
+              <span>Pl. I — Frontispiece</span>
+              <span>Composed MMXXV</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      {/* MARQUEE ──────────────────────────────────────── */}
+      <section style={{ borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)', padding: '24px 0', overflow: 'hidden', background: 'var(--bg-2)' }}>
+        <div className="marquee-track">
+          <MarqueeCopy />
+          <MarqueeCopy />
+        </div>
+      </section>
+
+      {/* VALUES ──────────────────────────────────────── */}
+      <section className="shell" style={{ paddingTop: 120, paddingBottom: 60 }}>
+        <div className="reveal">
+          <SectionMark num="I" label="The Argument" />
+        </div>
+        <h2 className="display reveal" style={{ animationDelay: '0.12s', fontSize: 'clamp(40px, 5vw, 68px)', margin: '0 0 80px', maxWidth: 900 }}>
+          Why one comes <em>here,</em> and not <em>elsewhere.</em>
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 60, columnGap: 80 }}>
+          {VALUES.map((v, i) =>
+            <div key={v.num} className="reveal" style={{ animationDelay: `${i * 0.1}s`, borderTop: '0.5px solid var(--rule)', paddingTop: 24, display: 'grid', gridTemplateColumns: '60px 1fr', gap: 20 }}>
+              <span className="mono" style={{ fontSize: 11, letterSpacing: '0.16em', color: 'var(--accent)', paddingTop: 4 }}>— {v.num}</span>
+              <div>
+                <h3 className="serif" style={{ fontSize: 28, fontWeight: 500, margin: '0 0 12px', lineHeight: 1.1 }}>{v.title}</h3>
+                <p style={{ fontSize: 15, lineHeight: 1.55, color: 'var(--ink-3)', margin: 0 }}>{v.body}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* EVENT TYPE SELECTOR ─────────────────────────── */}
+      <section id="event-types" className="shell" style={{ paddingTop: 120, paddingBottom: 80 }}>
+        <div className="reveal">
+          <SectionMark num="II" label="Choose the Occasion" />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, marginBottom: 60, alignItems: 'end' }}>
+          <h2 className="display reveal" style={{ animationDelay: '0.12s', fontSize: 'clamp(40px, 5vw, 68px)', margin: 0 }}>
+            What is the <em>occasion?</em>
+          </h2>
+          <p className="reveal" style={{ animationDelay: '0.24s', fontSize: 16, color: 'var(--ink-3)', lineHeight: 1.55, margin: 0 }}>
+            Choose the occasion to filter the register to vendors who specialise in it. You can refine by city, category, and price thereafter.
+          </p>
+        </div>
+
+        <div style={{ borderTop: '0.5px solid var(--ink)' }}>
+          {window.OA_DATA.EVENT_TYPES.map((e, i) =>
+            <a key={e.id} href={`#/browse?event=${e.id}`}
+              className="reveal"
+              style={{
+                display: 'grid', gridTemplateColumns: '80px 1.4fr 2fr 60px',
+                alignItems: 'center', gap: 32, padding: '32px 0',
+                borderBottom: '0.5px solid var(--rule)',
+                cursor: 'pointer',
+                transition: 'background .25s, padding .25s',
+                animationDelay: `${i * 0.08}s`,
+              }}
+              onMouseEnter={(e2) => { e2.currentTarget.style.paddingLeft = '24px'; e2.currentTarget.style.background = 'var(--accent-soft)'; }}
+              onMouseLeave={(e2) => { e2.currentTarget.style.paddingLeft = '0'; e2.currentTarget.style.background = 'transparent'; }}>
+              <span className="mono" style={{ fontSize: 12, letterSpacing: '0.14em', color: 'var(--accent)' }}>— {e.num}</span>
+              <h3 className="serif" style={{ fontSize: 'clamp(32px, 4vw, 56px)', fontWeight: 500, margin: 0, fontStyle: 'italic', letterSpacing: '-0.01em' }}>
+                {e.label}
+              </h3>
+              <p style={{ fontSize: 15, color: 'var(--ink-3)', margin: 0, lineHeight: 1.45 }}>{e.sub}</p>
+              <span style={{ justifySelf: 'end', color: 'var(--accent)' }}><Icon name="arrow" size={20} stroke={1} /></span>
+            </a>
+          )}
+        </div>
+      </section>
+
+      {/* QUOTE / TESTIMONY ───────────────────────────── */}
+      <section className="shell" style={{ paddingTop: 80, paddingBottom: 100, borderTop: '0.5px solid var(--rule)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 60, alignItems: 'start' }}>
+          <div className="reveal-left">
+            <Tile colors={['#5C1A2B', '#A88A4A']} monogram="—" style={{ aspectRatio: '3/4', maxWidth: 320 }} />
+          </div>
+          <div className="reveal-right" style={{ animationDelay: '0.18s' }}>
+            <span className="eyebrow eyebrow-gold">— Letter, A. Mensah —</span>
+            <p className="serif" style={{ fontSize: 'clamp(28px, 3.4vw, 44px)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.18, margin: '24px 0 28px', color: 'var(--ink)' }}>
+              <span style={{ fontSize: '1.4em', color: 'var(--accent)', verticalAlign: '-0.1em' }}>"</span>
+              They composed the day in advance, and stayed out of the room when the day arrived. That is the entire art of it.
+              <span style={{ color: 'var(--accent)' }}>"</span>
+            </p>
+            <hr className="h-rule" style={{ maxWidth: 100, marginBottom: 16 }} />
+            <p className="mono" style={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ink-3)', margin: 0 }}>
+              Anniversary, Lagos · 2024 · 220 guests
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CLOSING CTA ─────────────────────────────────── */}
+      <section style={{ background: 'var(--ink)', color: 'var(--bg)', padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
+        <div className="shell reveal-scale" style={{ position: 'relative', textAlign: 'center' }}>
+          <div className="eyebrow" style={{ color: 'var(--accent)', marginBottom: 28 }}>— By correspondence —</div>
+          <h2 className="display" style={{ fontSize: 'clamp(48px, 7vw, 96px)', margin: '0 0 40px', color: 'var(--bg)' }}>
+            Open the <em style={{ color: 'var(--accent)' }}>register.</em>
+          </h2>
+          <p style={{ fontSize: 17, color: 'var(--bg)', opacity: 0.7, maxWidth: 500, margin: '0 auto 44px', lineHeight: 1.5 }}>
+            Browse the full directory of vetted vendors and build a private shortlist of the houses you mean to call.
+          </p>
+          <a href="#/browse" className="btn gold">
+            Begin <Icon name="arrow" size={14} />
+          </a>
+        </div>
+      </section>
+    </main>);
+
+}
+
+window.Landing = Landing;
