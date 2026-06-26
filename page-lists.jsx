@@ -11,7 +11,13 @@ function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onR
   }, [lists]);
 
   const active = lists.find((l) => l.id === activeId);
-  const activeVendors = active ? active.vendorIds.map((id) => window.OA_DATA.VENDORS.find((v) => v.id === id)).filter(Boolean) : [];
+  const activeItems = active ? active.vendorIds.map((id) => {
+    const vendor = window.OA_DATA.VENDORS.find((v) => v.id === id);
+    if (vendor) return { ...vendor, _kind: 'vendor' };
+    const venue = (window.OA_DATA.VENUES || []).find((v) => v.id === id);
+    if (venue) return { ...venue, _kind: 'venue' };
+    return null;
+  }).filter(Boolean) : [];
 
   return (
     <main className="page-fade">
@@ -53,7 +59,7 @@ function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onR
                     {l.name}
                   </span>
                   <span className="mono" style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ink-4)' }}>
-                    {l.vendorIds.length} {l.vendorIds.length === 1 ? 'vendor' : 'vendors'}
+                    {l.vendorIds.length} {l.vendorIds.length === 1 ? 'item' : 'items'}
                   </span>
                 </button>
             )}
@@ -82,7 +88,7 @@ function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onR
                         </h2>
                   }
                       <p className="mono" style={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ink-3)', margin: '14px 0 0' }}>
-                        {active.vendorIds.length} vendors · created {active.createdAt}
+                        {active.vendorIds.length} {active.vendorIds.length === 1 ? 'item' : 'items'} · created {active.createdAt}
                       </p>
                     </div>
                     <div style={{ display: 'flex', gap: 8 }}>
@@ -92,34 +98,48 @@ function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onR
                     </div>
                   </div>
 
-                  {activeVendors.length === 0 ?
+                  {activeItems.length === 0 ?
               <EmptyState
                 title="This list is empty."
-                body="Browse the register and tap the + on any vendor to add them here."
-                action={<a href="#/browse" className="btn">Browse register <Icon name="arrow" size={13} /></a>} /> :
+                body="Browse vendors or venues and tap the + to add them here."
+                action={<div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+                  <a href="#/browse" className="btn">Browse vendors <Icon name="arrow" size={13} /></a>
+                  <a href="#/venues" className="btn ghost">Browse venues <Icon name="arrow" size={13} /></a>
+                </div>} /> :
 
 
               <div style={{ borderTop: '0.5px solid var(--ink)' }}>
-                      {activeVendors.map((v, i) => {
-                  const cat = window.OA_DATA.CATEGORIES.find((c) => c.id === v.cat);
+                      {activeItems.map((v, i) => {
                   const monogram = v.name.split(' ').map((w) => w[0]).slice(0, 2).join('');
+                  const isVenue = v._kind === 'venue';
+                  const sublabel = isVenue
+                    ? v.locationName
+                    : (() => { const cat = window.OA_DATA.CATEGORIES.find((c) => c.id === v.cat); return `${v.city} · ✦ ${v.rating.toFixed(2)}`; })();
+                  const typeLabel = isVenue
+                    ? v.type
+                    : (window.OA_DATA.CATEGORIES.find((c) => c.id === v.cat)?.label);
+                  const detailHref = isVenue ? `#/venue/${v.id}` : `#/vendor/${v.id}`;
                   return (
                     <div key={v.id} style={{ display: 'grid', gridTemplateColumns: '50px 110px 1fr 140px 100px 60px', gap: 24, alignItems: 'center', padding: '20px 0', borderBottom: '0.5px solid var(--rule)' }}>
                             <span className="mono" style={{ fontSize: 12, letterSpacing: '0.1em', color: 'var(--ink-4)' }}>— {String(i + 1).padStart(2, '0')}</span>
                             <Tile colors={v.tile} monogram={monogram} style={{ aspectRatio: '1/1', width: 90 }} />
                             <div>
-                              <div className="mono" style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 4 }}>{cat?.label}</div>
-                              <a href={`#/vendor/${v.id}`} className="serif" style={{ fontSize: 26, fontWeight: 500, color: 'var(--ink)', display: 'block', lineHeight: 1.05 }}>{v.name}</a>
-                              <span style={{ fontSize: 13, color: 'var(--ink-3)' }}>{v.city} · ✦ {v.rating.toFixed(2)}</span>
+                              <div className="mono" style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 4 }}>{typeLabel}</div>
+                              <a href={detailHref} className="serif" style={{ fontSize: 26, fontWeight: 500, color: 'var(--ink)', display: 'block', lineHeight: 1.05 }}>{v.name}</a>
+                              <span style={{ fontSize: 13, color: 'var(--ink-3)' }}>{sublabel}</span>
                             </div>
-                            <span><TierPip tier={v.tier} /></span>
-                            <a href={`#/vendor/${v.id}`} className="btn-text" style={{ borderBottom: 'none', fontSize: 11 }}>View <Icon name="arrow" size={11} /></a>
+                            <span>{isVenue
+                              ? <span className="mono" style={{ fontSize: 11, color: 'var(--ink-3)' }}>{v.budgetCurrency} {v.budgetMin.toLocaleString()}+</span>
+                              : <TierPip tier={v.tier} />}
+                            </span>
+                            <a href={detailHref} className="btn-text" style={{ borderBottom: 'none', fontSize: 11 }}>View <Icon name="arrow" size={11} /></a>
                             <button className="icon-btn" aria-label="Remove" onClick={() => onRemoveFromList(active.id, v.id)}><Icon name="x" size={14} /></button>
                           </div>);
 
                 })}
-                      <div style={{ paddingTop: 36, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <a href="#/browse" className="btn-text"><Icon name="plus" size={12} /> Add more vendors</a>
+                      <div style={{ paddingTop: 36, display: 'flex', gap: 24, alignItems: 'center' }}>
+                        <a href="#/browse" className="btn-text"><Icon name="plus" size={12} /> Add vendors</a>
+                        <a href="#/venues" className="btn-text"><Icon name="plus" size={12} /> Add venues</a>
                       </div>
                     </div>
               }

@@ -84,6 +84,7 @@ function Header({ route, lists, user, onSignIn, onSignOut, dark, onToggleDark })
   const listCount = (lists || []).reduce((acc, l) => acc + l.vendorIds.length, 0);
   const links = [
     { href: '#/browse',  label: 'Vendors' },
+    { href: '#/venues',  label: 'Venues' },
     { href: '#/lists',   label: `Shortlists${listCount ? ` · ${listCount}` : ''}` },
     { href: '#/admin',   label: 'Admin' },
   ];

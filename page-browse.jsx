@@ -164,7 +164,8 @@ function Browse({ favorites, onFav, onShortlist, onOpen, lists, onCreateList, on
 function ShortlistPicker({ vendorId, lists, onAdd, onCreate, onClose }) {
   const [creating, setCreating] = React.useState(lists.length === 0);
   const [name, setName] = React.useState('');
-  const vendor = window.OA_DATA.VENDORS.find(v => v.id === vendorId);
+  const vendor = window.OA_DATA.VENDORS.find(v => v.id === vendorId)
+    || (window.OA_DATA.VENUES || []).find(v => v.id === vendorId);
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>

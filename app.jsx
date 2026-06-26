@@ -8,7 +8,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const FAVS_LIST_ID = 'favorites';
 
 // Per-user state key (so different accounts have different favourites/lists)
-function stateKey(email) { return 'oa-state-v1::' + (email || 'guest'); }
+function stateKey(email) { return 'oa-state-v2::' + (email || 'guest'); }
 
 function defaultFavList() {
   const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -51,6 +51,7 @@ function App() {
   const [lists, setLists] = React.useState(() => ensureFavList(loadState(auth.user?.email).lists || []));
   const [vendors, setVendors] = React.useState(() => loadState(auth.user?.email).vendors || window.OA_DATA.VENDORS);
   const [categories, setCategories] = React.useState(() => loadState(auth.user?.email).categories || window.OA_DATA.CATEGORIES);
+  const [venues, setVenues] = React.useState(() => loadState(auth.user?.email).venues || window.OA_DATA.VENUES);
   const [shortlistTarget, setShortlistTarget] = React.useState(null);
   const [toast, setToast] = React.useState('');
 
@@ -64,17 +65,19 @@ function App() {
     setLists(ensureFavList(s.lists || []));
     if (s.vendors) setVendors(s.vendors);
     if (s.categories) setCategories(s.categories);
+    if (s.venues) setVenues(s.venues);
   }, [auth.user]);
 
   // Persist
   React.useEffect(() => {
-    saveState(auth.user?.email, { lists, vendors, categories });
-  }, [lists, vendors, categories, auth.user]);
+    saveState(auth.user?.email, { lists, vendors, categories, venues });
+  }, [lists, vendors, categories, venues, auth.user]);
 
   React.useEffect(() => {
     window.OA_DATA.VENDORS = vendors;
     window.OA_DATA.CATEGORIES = categories;
-  }, [vendors, categories]);
+    window.OA_DATA.VENUES = venues;
+  }, [vendors, categories, venues]);
 
   React.useEffect(() => {
     document.documentElement.dataset.theme = t.dark ? 'dark' : 'light';
@@ -195,6 +198,15 @@ function App() {
                     onDeleteList={deleteList} onRemoveFromList={removeFromList}
                     onOpenVendor={(id) => window.location.hash = `#/vendor/${id}`} />;
     }
+  } else if (route.startsWith('/venues')) {
+    page = <VenueBrowse favorites={favorites} onFav={toggleFav}
+                        onOpen={(id) => window.location.hash = `#/venue/${id}`}
+                        lists={lists} onCreateList={createList} onAddTo={addToList} />;
+  } else if (route.startsWith('/venue/')) {
+    const vid = route.replace('/venue/', '');
+    page = <VenueDetail venueId={vid} favorites={favorites}
+                        onFav={toggleFav} onShortlist={requestShortlist}
+                        onOpen={(id) => window.location.hash = `#/venue/${id}`} />;
   } else if (route.startsWith('/admin')) {
     page = <Admin vendors={vendors} categories={categories}
                   onSaveVendor={saveVendor} onDeleteVendor={deleteVendor}
