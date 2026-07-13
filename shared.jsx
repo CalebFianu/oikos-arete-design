@@ -83,10 +83,12 @@ function SectionMark({ num, label }) {
 function Header({ route, lists, user, onSignIn, onSignOut, dark, onToggleDark }) {
   const listCount = (lists || []).reduce((acc, l) => acc + l.vendorIds.length, 0);
   const links = [
-    { href: '#/browse',  label: 'Vendors' },
-    { href: '#/venues',  label: 'Venues' },
-    { href: '#/lists',   label: `Shortlists${listCount ? ` · ${listCount}` : ''}` },
-    { href: '#/admin',   label: 'Admin' },
+    { href: '#/browse',     label: 'Vendors' },
+    { href: '#/venues',     label: 'Venues' },
+    { href: '#/lists',      label: `Shortlists${listCount ? ` · ${listCount}` : ''}` },
+    ...(user ? [{ href: '#/my-events', label: 'My Events' }] : []),
+    { href: '#/about',      label: 'About' },
+    { href: '#/admin',      label: 'Admin' },
   ];
   const [menuOpen, setMenuOpen] = React.useState(false);
   const initial = user ? (user.name || user.email)[0].toUpperCase() : '';

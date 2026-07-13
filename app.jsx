@@ -6,6 +6,23 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 
 const FAVS_LIST_ID = 'favorites';
+const APPS_KEY = 'oa-applications';
+const INQUIRIES_KEY = 'oa-inquiries';
+
+function loadApplications() {
+  try { const raw = localStorage.getItem(APPS_KEY); if (raw) return JSON.parse(raw); } catch (e) {}
+  return [];
+}
+function saveApplications(apps) {
+  try { localStorage.setItem(APPS_KEY, JSON.stringify(apps)); } catch (e) {}
+}
+function loadInquiries() {
+  try { const raw = localStorage.getItem(INQUIRIES_KEY); if (raw) return JSON.parse(raw); } catch (e) {}
+  return [];
+}
+function saveInquiries(items) {
+  try { localStorage.setItem(INQUIRIES_KEY, JSON.stringify(items)); } catch (e) {}
+}
 
 // Per-user state key (so different accounts have different favourites/lists)
 function stateKey(email) { return 'oa-state-v2::' + (email || 'guest'); }
@@ -52,6 +69,8 @@ function App() {
   const [vendors, setVendors] = React.useState(() => loadState(auth.user?.email).vendors || window.OA_DATA.VENDORS);
   const [categories, setCategories] = React.useState(() => loadState(auth.user?.email).categories || window.OA_DATA.CATEGORIES);
   const [venues, setVenues] = React.useState(() => loadState(auth.user?.email).venues || window.OA_DATA.VENUES);
+  const [applications, setApplications] = React.useState(loadApplications);
+  const [inquiries, setInquiries] = React.useState(loadInquiries);
   const [shortlistTarget, setShortlistTarget] = React.useState(null);
   const [toast, setToast] = React.useState('');
 
@@ -72,6 +91,9 @@ function App() {
   React.useEffect(() => {
     saveState(auth.user?.email, { lists, vendors, categories, venues });
   }, [lists, vendors, categories, venues, auth.user]);
+
+  React.useEffect(() => { saveApplications(applications); }, [applications]);
+  React.useEffect(() => { saveInquiries(inquiries); }, [inquiries]);
 
   React.useEffect(() => {
     window.OA_DATA.VENDORS = vendors;
@@ -166,6 +188,47 @@ function App() {
   };
   const deleteCategory = (id) => { setCategories((prev) => prev.filter((c) => c.id !== id)); showToast('Category deleted'); };
 
+  const submitApplication = (app) => {
+    setApplications(prev => [...prev, app]);
+  };
+
+  const submitInquiry = (inq) => {
+    setInquiries(prev => [...prev, inq]);
+    showToast('Event enquiry submitted');
+  };
+
+  const updateInquiry = (updated) => {
+    setInquiries(prev => prev.map(i => i.id === updated.id ? updated : i));
+    showToast('Curation sent to client');
+  };
+
+  const approveApplication = (app) => {
+    const vendor = {
+      id: 'v' + Date.now().toString(36),
+      name: app.name,
+      cat: app.cat,
+      city: app.city,
+      tier: 2,
+      rating: 4.5,
+      tags: app.tags || [],
+      blurb: app.blurb,
+      phone: app.phone,
+      email: app.email,
+      web: app.web || '',
+      ig: app.ig || '',
+      tile: ['#0E0E0C', '#A88A4A'],
+      disabled: false,
+    };
+    saveVendor(vendor);
+    setApplications(prev => prev.filter(a => a.id !== app.id));
+    showToast('Application approved — vendor added to the register');
+  };
+
+  const denyApplication = (id) => {
+    setApplications(prev => prev.filter(a => a.id !== id));
+    showToast('Application denied');
+  };
+
   const requestShortlist = (vendorId) => {
     requireAuth(() => setShortlistTarget(vendorId),
       'Sign in to add vendors to a shortlist.');
@@ -209,11 +272,26 @@ function App() {
                         onOpen={(id) => window.location.hash = `#/venue/${id}`} />;
   } else if (route.startsWith('/admin')) {
     page = <Admin vendors={vendors} categories={categories}
+                  applications={applications}
+                  inquiries={inquiries}
                   onSaveVendor={saveVendor} onDeleteVendor={deleteVendor}
                   onToggleVendor={toggleVendor}
-                  onSaveCategory={saveCategory} onDeleteCategory={deleteCategory} />;
+                  onSaveCategory={saveCategory} onDeleteCategory={deleteCategory}
+                  onApproveApplication={approveApplication}
+                  onDenyApplication={denyApplication}
+                  onUpdateInquiry={updateInquiry} />;
+  } else if (route.startsWith('/vendor-apply')) {
+    page = <VendorApply onSubmit={submitApplication} />;
+  } else if (route.startsWith('/about')) {
+    page = <About />;
+  } else if (route.startsWith('/my-events')) {
+    const userInquiries = inquiries.filter(i => i.userEmail === auth.user?.email);
+    page = <MyEvents user={auth.user} inquiries={userInquiries} vendors={vendors}
+                     onSignIn={() => setAuthPrompt({ mode: 'signin' })} />;
   } else {
-    page = <Landing />;
+    page = <Landing user={auth.user}
+                    onSignIn={() => setAuthPrompt({ mode: 'signin' })}
+                    onSubmitInquiry={submitInquiry} />;
   }
 
   return (
