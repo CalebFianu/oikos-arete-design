@@ -183,7 +183,7 @@ function Footer() {
             <h4>Correspondence</h4>
             <ul>
               <li>concierge@oikosarete.co</li>
-              <li>+234 (0) 802 — 119 — 0044</li>
+              <li>+233 56 004 8680</li>
               <li>By appointment only</li>
             </ul>
           </div>

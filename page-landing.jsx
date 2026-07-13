@@ -232,10 +232,35 @@ function InqField({ label, children, error, colSpan }) {
   );
 }
 
+function BrowseChoiceModal({ onTellUs, onGoToVendors, onClose }) {
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 520, textAlign: 'center' }}>
+        <div className="eyebrow eyebrow-gold" style={{ marginBottom: 16 }}>— Before you browse —</div>
+        <h3 className="serif" style={{ fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 500, fontStyle: 'italic', margin: '0 0 16px', lineHeight: 1.1 }}>
+          How would you like to start?
+        </h3>
+        <p style={{ fontSize: 15, lineHeight: 1.6, color: 'var(--ink-3)', margin: '0 0 36px', maxWidth: 400, marginLeft: 'auto', marginRight: 'auto' }}>
+          We can curate a shortlist based on your event details, or you can explore the full vendor register yourself.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
+          <button className="btn gold" style={{ width: '100%', maxWidth: 340, justifyContent: 'center' }} onClick={onTellUs}>
+            Tell us about your event <Icon name="arrow" size={14} />
+          </button>
+          <button className="btn ghost" style={{ width: '100%', maxWidth: 340, justifyContent: 'center' }} onClick={onGoToVendors}>
+            Go to Vendors <Icon name="arrow" size={14} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Landing({ navigate, user, onSignIn, onSubmitInquiry }) {
   useScrollReveal();
   const [vendorModal, setVendorModal] = React.useState(false);
   const [inquiryModal, setInquiryModal] = React.useState(false);
+  const [browseChoiceModal, setBrowseChoiceModal] = React.useState(false);
 
   return (
     <main className="page-fade">
@@ -256,9 +281,9 @@ function Landing({ navigate, user, onSignIn, onSubmitInquiry }) {
               Oikos Arete is a personally vetted network of Ghana's most reliable event vendors, built for people who refuse to gamble on their most important days.
             </p>
             <div className="hero-anim" style={{ animationDelay: '0.7s', display: 'flex', gap: 16, marginTop: 40, flexWrap: 'wrap' }}>
-              <a href="#/browse" className="btn">
+              <button className="btn" onClick={() => setBrowseChoiceModal(true)}>
                 Browse Vetted Vendors <Icon name="arrow" size={14} />
-              </a>
+              </button>
               <button className="btn ghost" onClick={() => setVendorModal(true)}>
                 Register as a Vendor
               </button>
@@ -417,6 +442,13 @@ function Landing({ navigate, user, onSignIn, onSubmitInquiry }) {
         </div>
       </section>
 
+      {browseChoiceModal && (
+        <BrowseChoiceModal
+          onClose={() => setBrowseChoiceModal(false)}
+          onTellUs={() => { setBrowseChoiceModal(false); setInquiryModal(true); }}
+          onGoToVendors={() => { setBrowseChoiceModal(false); window.location.hash = '#/browse'; }}
+        />
+      )}
       {vendorModal && <VendorInfoModal onClose={() => setVendorModal(false)} />}
       {inquiryModal && <EventInquiryModal user={user} onSignIn={onSignIn} onClose={() => setInquiryModal(false)} onSubmit={(inq) => { onSubmitInquiry(inq); }} />}
     </main>);
