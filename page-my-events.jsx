@@ -81,8 +81,8 @@ function MyEvents({ user, inquiries, vendors, onSignIn }) {
                       <div className="eyebrow eyebrow-gold" style={{ marginBottom: 10 }}>
                         — {eventLabel} · Submitted {inq.submittedAt} —
                       </div>
-                      <h2 className="serif" style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 500, fontStyle: 'italic', margin: 0, lineHeight: 1.1 }}>
-                        {inq.city}{inq.eventDate ? <span style={{ fontStyle: 'normal', fontWeight: 400, fontSize: '0.7em', color: 'var(--ink-3)' }}> · Event date: {inq.eventDate}</span> : ''}
+                      <h2 className="serif" style={{ fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: 500, fontStyle: 'italic', margin: 0, lineHeight: 1.1 }}>
+                        {inq.city}
                       </h2>
                     </div>
                     <span className="mono" style={{
@@ -95,22 +95,31 @@ function MyEvents({ user, inquiries, vendors, onSignIn }) {
                     </span>
                   </div>
 
-                  {/* Details grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 20, marginBottom: inq.details ? 20 : 0 }}>
+                  {/* Detail strip */}
+                  <div className="event-detail-strip" style={{
+                    display: 'grid',
+                    gridTemplateColumns: `repeat(${[inq.eventDate, true, true, true, catList].filter(Boolean).length}, 1fr)`,
+                    borderTop: '0.5px solid var(--accent)',
+                    paddingTop: 20,
+                  }}>
                     {[
-                      ['Guest count',   inq.guestCount || '—'],
-                      ['Budget',        BUDGET_LABELS[inq.budget] || '—'],
-                      ['Vendor types',  catList || '—'],
-                    ].map(([label, value]) => (
-                      <div key={label}>
-                        <div className="field-label" style={{ marginBottom: 4 }}>{label}</div>
-                        <div style={{ fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.4 }}>{value}</div>
+                      ...(inq.eventDate ? [['Event date', inq.eventDate]] : []),
+                      ['Guest count',  inq.guestCount || '—'],
+                      ['Budget',       BUDGET_LABELS[inq.budget] || '—'],
+                      ...(catList ? [['Vendor types', catList]] : []),
+                    ].map(([label, value], idx) => (
+                      <div key={label} style={{
+                        paddingLeft: idx > 0 ? 20 : 0,
+                        borderLeft: idx > 0 ? '0.5px solid var(--rule)' : 'none',
+                      }}>
+                        <div className="field-label" style={{ marginBottom: 6 }}>{label}</div>
+                        <div className="serif" style={{ fontSize: 16, color: 'var(--ink-2)', lineHeight: 1.4 }}>{value}</div>
                       </div>
                     ))}
                   </div>
 
                   {inq.details && (
-                    <p className="serif" style={{ fontSize: 16, fontStyle: 'italic', color: 'var(--ink-3)', margin: '20px 0 0', lineHeight: 1.55 }}>
+                    <p className="serif" style={{ fontSize: 16, fontStyle: 'italic', color: 'var(--ink-3)', margin: '24px 0 0', lineHeight: 1.55 }}>
                       "{inq.details}"
                     </p>
                   )}

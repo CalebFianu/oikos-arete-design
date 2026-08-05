@@ -446,6 +446,13 @@ html { scroll-behavior: smooth; }
   animation-play-state: running;
 }
 
+/* ── My Events responsive ────────────────────────────────── */
+@media (max-width: 720px) {
+  .event-detail-strip { grid-template-columns: 1fr 1fr !important; row-gap: 20px; }
+  .event-detail-strip > div { border-left: none !important; padding-left: 0 !important; }
+  .event-detail-strip > div:nth-child(even) { padding-left: 20px !important; border-left: 0.5px solid var(--rule) !important; }
+}
+
 /* ── Reduced-motion safety ───────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .hero-anim, .reveal, .reveal-left, .reveal-right, .reveal-scale {
