@@ -79,10 +79,10 @@ function MyEvents({ user, inquiries, vendors, onSignIn }) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 28 }}>
                     <div>
                       <div className="eyebrow eyebrow-gold" style={{ marginBottom: 10 }}>
-                        — {eventLabel} · {inq.submittedAt} —
+                        — {eventLabel} · Submitted {inq.submittedAt} —
                       </div>
                       <h2 className="serif" style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 500, fontStyle: 'italic', margin: 0, lineHeight: 1.1 }}>
-                        {inq.city}{inq.eventDate ? <span style={{ fontStyle: 'normal', fontWeight: 400, fontSize: '0.7em', color: 'var(--ink-3)' }}> · {inq.eventDate}</span> : ''}
+                        {inq.city}{inq.eventDate ? <span style={{ fontStyle: 'normal', fontWeight: 400, fontSize: '0.7em', color: 'var(--ink-3)' }}> · Event date: {inq.eventDate}</span> : ''}
                       </h2>
                     </div>
                     <span className="mono" style={{

@@ -475,7 +475,7 @@ function CurationModal({ inquiry, vendors, categories, onClose, onSave }) {
         <h3 className="serif" style={{ fontSize: 28, fontWeight: 500, margin: '0 0 4px' }}>{inquiry.userName}</h3>
         <p className="mono" style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-4)', margin: '0 0 24px' }}>
           {EVENT_TYPE_LABELS[inquiry.eventType] || inquiry.eventType} · {inquiry.city}
-          {inquiry.eventDate ? ` · ${inquiry.eventDate}` : ''}
+          {inquiry.eventDate ? ` · Event date: ${inquiry.eventDate}` : ''}
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, borderTop: '0.5px solid var(--rule)', marginBottom: 20 }}>
