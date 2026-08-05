@@ -1,9 +1,12 @@
 // Venue detail page — gallery + full editorial profile
 
-function VenueGallery({ images }) {
+function VenueGallery({ images, fallbackTile }) {
   const [active, setActive] = React.useState(0);
   const [lightbox, setLightbox] = React.useState(false);
   const count = images.length;
+  // images is now an array of URL strings; fallbackTile is the venue's tile color pair
+  const imgSrc = (idx) => (typeof images[idx] === 'string' ? images[idx] : undefined);
+  const tileColors = fallbackTile || ['#1a1612','#a88a4a'];
 
   // Auto-advance silently in the background; pause when lightbox is open
   React.useEffect(() => {
@@ -22,14 +25,14 @@ function VenueGallery({ images }) {
     <div>
       {/* Main tile — matches vendor's large 4/5 tile exactly; click opens lightbox */}
       <div onClick={() => setLightbox(true)} style={{ cursor: 'zoom-in' }}>
-        <Tile colors={images[active]} style={{ aspectRatio: '4/5' }} />
+        <Tile colors={tileColors} src={imgSrc(active)} style={{ aspectRatio: '4/5' }} />
       </div>
 
       {/* 3-column thumbnail strip — same grid as vendor detail's secondary tiles */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginTop: 12 }}>
         {thumbIndices.map((idx, i) => (
           <div key={i} onClick={() => { setActive(idx); setLightbox(true); }} style={{ cursor: 'pointer' }}>
-            <Tile colors={images[idx]} style={{ aspectRatio: '1/1' }} />
+            <Tile colors={tileColors} src={imgSrc(idx)} style={{ aspectRatio: '1/1' }} />
           </div>
         ))}
       </div>
@@ -41,7 +44,7 @@ function VenueGallery({ images }) {
           zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center',
         }} onClick={() => setLightbox(false)}>
           <div onClick={e => e.stopPropagation()} style={{ position: 'relative', width: '82vw', maxWidth: 920 }}>
-            <Tile colors={images[active]} style={{ aspectRatio: '4/3' }} />
+            <Tile colors={tileColors} src={imgSrc(active)} style={{ aspectRatio: '4/3' }} />
 
             {count > 1 && (
               <>
@@ -110,7 +113,7 @@ function VenueDetail({ venueId, favorites, onFav, onShortlist, onOpen }) {
       <section className="shell" style={{ paddingTop: 40, paddingBottom: 80 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 60, alignItems: 'start' }}>
           {/* Gallery */}
-          <VenueGallery images={v.images} />
+          <VenueGallery images={v.images} fallbackTile={v.tile} />
 
           {/* Info panel */}
           <div>

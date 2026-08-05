@@ -50,11 +50,18 @@ function OALogo({ size = 'normal' }) {
   );
 }
 
-// ── Tile (placeholder imagery) ──────────────────────────────────────────
-function Tile({ colors = ['#1a1612','#a88a4a'], monogram, style }) {
+// ── Tile (imagery or gradient placeholder) ──────────────────────────────
+function Tile({ colors = ['#1a1612','#a88a4a'], monogram, style, src }) {
   const s = { '--tile-a': colors[0], '--tile-b': colors[1], ...style };
   return (
     <div className="tile" style={s}>
+      {src && (
+        <img
+          src={src}
+          alt=""
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+      )}
       {monogram && <div className="tile-monogram">{monogram}</div>}
     </div>
   );

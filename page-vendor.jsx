@@ -22,7 +22,7 @@ function VendorDetail({ vendorId, favorites, onFav, onShortlist, onOpen, navigat
       <section className="shell" style={{ paddingTop: 40, paddingBottom: 80 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 60, alignItems: 'start' }}>
           <div>
-            <Tile colors={v.tile} monogram={monogram} style={{ aspectRatio: '4/5' }} />
+            <Tile colors={v.tile} src={v.image} monogram={v.image ? undefined : monogram} style={{ aspectRatio: '4/5' }} />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginTop: 12 }}>
               <Tile colors={[v.tile[1], v.tile[0]]} style={{ aspectRatio: '1/1' }} />
               <Tile colors={['#0E0E0C', v.tile[1]]} style={{ aspectRatio: '1/1' }} />

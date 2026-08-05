@@ -6,7 +6,7 @@ function VendorCard({ vendor, isFav, onFav, onShortlist, onOpen }) {
   return (
     <article className="vendor-card" onClick={() => onOpen(vendor.id)}>
       <div className="vc-tile">
-        <Tile colors={vendor.tile} monogram={monogram} style={{ height: '100%' }} />
+        <Tile colors={vendor.tile} src={vendor.image} monogram={vendor.image ? undefined : monogram} style={{ height: '100%' }} />
         <div className="actions" onClick={e => e.stopPropagation()}>
           <button className={`icon-btn ${isFav ? 'active' : ''}`} aria-label="Favorite"
                   onClick={() => onFav(vendor.id)}>
@@ -71,11 +71,11 @@ function Browse({ favorites, onFav, onShortlist, onOpen, lists, onCreateList, on
     <main className="page-fade">
       <section className="shell" style={{ paddingTop: 60, paddingBottom: 40 }}>
         <SectionMark num="II" label={eventLabel ? `Register — ${eventLabel}` : 'The Register'} />
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 40, alignItems: 'end', marginBottom: 40 }}>
+        <div style={{ marginBottom: 40 }}>
           <h1 className="display" style={{ fontSize: 'clamp(48px, 6vw, 84px)', margin: 0 }}>
             {eventLabel ? <>For your <em>{eventLabel.toLowerCase()}.</em></> : <>The <em>register.</em></>}
           </h1>
-          <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.55, margin: 0 }}>
+          <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.55, margin: '20px 0 0', maxWidth: 520 }}>
             {filtered.length} of {VENDORS.length} houses. Refine by category, city, or tier — or search by name, specialty, or city.
           </p>
         </div>

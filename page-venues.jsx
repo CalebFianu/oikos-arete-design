@@ -5,7 +5,7 @@ function VenueCard({ venue, isFav, onFav, onShortlist, onOpen }) {
   return (
     <article className="vendor-card" onClick={() => onOpen(venue.id)}>
       <div className="vc-tile">
-        <Tile colors={venue.tile} monogram={monogram} style={{ height: '100%' }} />
+        <Tile colors={venue.tile} src={venue.images?.[0]} monogram={venue.images?.[0] ? undefined : monogram} style={{ height: '100%' }} />
         <div className="actions" onClick={e => e.stopPropagation()}>
           <button className={`icon-btn ${isFav ? 'active' : ''}`} aria-label="Favorite"
                   onClick={() => onFav(venue.id)}>
@@ -62,11 +62,11 @@ function VenueBrowse({ favorites, onFav, onOpen, lists, onCreateList, onAddTo })
     <main className="page-fade">
       <section className="shell" style={{ paddingTop: 60, paddingBottom: 40 }}>
         <SectionMark num="III" label="Venues — Accra" />
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 40, alignItems: 'end', marginBottom: 40 }}>
+        <div style={{ marginBottom: 40 }}>
           <h1 className="display" style={{ fontSize: 'clamp(48px, 6vw, 84px)', margin: 0 }}>
             The <em>venues.</em>
           </h1>
-          <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.55, margin: 0 }}>
+          <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.55, margin: '20px 0 0', maxWidth: 520 }}>
             {filtered.length} of {VENUES.length} spaces, all in Accra. Search by name, neighbourhood, or character.
           </p>
         </div>

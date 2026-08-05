@@ -451,6 +451,7 @@ function CurationModal({ inquiry, vendors, categories, onClose, onSave }) {
   const [note, setNote] = React.useState(inquiry.adminNote || '');
   const [selectedIds, setSelectedIds] = React.useState(inquiry.curatedVendorIds || []);
   const [vendorSearch, setVendorSearch] = React.useState('');
+  const [curationFilterCat, setCurationFilterCat] = React.useState('all');
 
   const EVENT_TYPE_LABELS = Object.fromEntries(window.OA_DATA.EVENT_TYPES.map(t => [t.id, t.label]));
   const CATEGORY_LABELS   = Object.fromEntries(window.OA_DATA.CATEGORIES.map(c => [c.id, c.label]));
@@ -460,6 +461,7 @@ function CurationModal({ inquiry, vendors, categories, onClose, onSave }) {
 
   const filteredVendors = vendors.filter(v => {
     if (v.disabled) return false;
+    if (curationFilterCat !== 'all' && v.cat !== curationFilterCat) return false;
     if (!vendorSearch) return true;
     return v.name.toLowerCase().includes(vendorSearch.toLowerCase()) || v.city.toLowerCase().includes(vendorSearch.toLowerCase());
   });
@@ -480,6 +482,7 @@ function CurationModal({ inquiry, vendors, categories, onClose, onSave }) {
           {[
             ['Guests', inquiry.guestCount || '—'],
             ['Budget', BUDGET_LABELS[inquiry.budget] || '—'],
+            ['WhatsApp', inquiry.phone || '—'],
             ['Vendor types', (inquiry.categories || []).map(id => CATEGORY_LABELS[id] || id).join(', ') || '—'],
           ].map(([label, val]) => (
             <div key={label} style={{ padding: '14px 16px 14px 0', borderBottom: '0.5px solid var(--rule)' }}>
@@ -514,11 +517,17 @@ function CurationModal({ inquiry, vendors, categories, onClose, onSave }) {
               })}
             </div>
           )}
-          <div className="search-bar" style={{ height: 40, marginBottom: 8 }}>
-            <Icon name="search" size={15} stroke={1.2} />
-            <input value={vendorSearch} onChange={e => setVendorSearch(e.target.value)}
-                   placeholder="Search vendors by name or city…"
-                   style={{ fontFamily: 'var(--sans)', fontSize: 13, fontStyle: 'normal' }} />
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 8 }}>
+            <div className="search-bar" style={{ height: 40, flex: 1 }}>
+              <Icon name="search" size={15} stroke={1.2} />
+              <input value={vendorSearch} onChange={e => setVendorSearch(e.target.value)}
+                     placeholder="Search vendors by name or city…"
+                     style={{ fontFamily: 'var(--sans)', fontSize: 13, fontStyle: 'normal' }} />
+            </div>
+            <select className="field" value={curationFilterCat} onChange={e => setCurationFilterCat(e.target.value)} style={{ minWidth: 160, height: 40 }}>
+              <option value="all">All categories</option>
+              {categories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+            </select>
           </div>
           <div style={{ maxHeight: 220, overflowY: 'auto', border: '0.5px solid var(--rule)' }}>
             {filteredVendors.map(v => (

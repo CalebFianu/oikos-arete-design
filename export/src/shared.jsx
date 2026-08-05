@@ -179,7 +179,7 @@ function Footer() {
           <div>
             <h4>Correspondence</h4>
             <ul>
-              <li>concierge@oikosarete.co</li>
+              <li>concierge@credence.co</li>
               <li>+233 56 004 8680</li>
               <li>By appointment only</li>
             </ul>

@@ -1,7 +1,18 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:houseofarete.com)"
+      "WebFetch(domain:houseofarete.com)",
+      "Bash(wc:*)",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(mv \"Oikos Arete - Admin.html\" \"Credence & Co - Admin.html\")",
+      "Bash(mv \"Oikos Arete - Lists.html\" \"Credence & Co - Lists.html\")",
+      "Bash(mv \"Oikos Arete - Vendor.html\" \"Credence & Co - Vendor.html\")",
+      "Bash(mv \"Oikos Arete.html\" \"Credence & Co.html\")",
+      "Bash(rm \"Credence & Co.html\")",
+      "Bash(rm \"export/Credence & Co - Admin.html\")",
+      "Bash(rm \"export/Credence & Co - Lists.html\")",
+      "Bash(rm \"export/Credence & Co - Vendor.html\")",
+      "Bash(rm \"export/Credence & Co.html\")"
     ]
   }
 }

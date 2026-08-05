@@ -84,7 +84,8 @@ function VendorInfoModal({ onClose }) {
 function EventInquiryModal({ user, onSignIn, onClose, onSubmit }) {
   const [form, setForm] = React.useState({
     eventType: window.OA_DATA.EVENT_TYPES[0]?.id || '',
-    eventDate: '', city: '', guestCount: '', budget: '', categories: [], details: '',
+    eventTypeOther: '',
+    eventDate: '', city: '', guestCount: '', phone: '', budget: '', categories: [], details: '',
   });
   const [errors, setErrors] = React.useState({});
   const [submitted, setSubmitted] = React.useState(false);
@@ -172,6 +173,10 @@ function EventInquiryModal({ user, onSignIn, onClose, onSubmit }) {
             <select className="field" value={form.eventType} onChange={e => set('eventType', e.target.value)} style={{ width: '100%' }}>
               {window.OA_DATA.EVENT_TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
             </select>
+            {form.eventType === 'other' && (
+              <input className="field" value={form.eventTypeOther} onChange={e => set('eventTypeOther', e.target.value)}
+                     placeholder="Please specify…" style={{ width: '100%', marginTop: 8 }} />
+            )}
           </InqField>
           <InqField label="Event date (if known)">
             <input type="date" className="field" value={form.eventDate} onChange={e => set('eventDate', e.target.value)} style={{ width: '100%' }} />
@@ -185,6 +190,11 @@ function EventInquiryModal({ user, onSignIn, onClose, onSubmit }) {
             <input type="number" className="field" value={form.guestCount}
                    onChange={e => set('guestCount', e.target.value)}
                    placeholder="e.g. 150" style={{ width: '100%' }} />
+          </InqField>
+          <InqField label="WhatsApp number" colSpan={2}>
+            <input type="tel" className="field" value={form.phone}
+                   onChange={e => set('phone', e.target.value)}
+                   placeholder="e.g. +233 50 123 4567" style={{ width: '100%' }} />
           </InqField>
           <InqField label="Budget range" colSpan={2}>
             <select className="field" value={form.budget} onChange={e => set('budget', e.target.value)} style={{ width: '100%' }}>
@@ -204,7 +214,7 @@ function EventInquiryModal({ user, onSignIn, onClose, onSubmit }) {
           </InqField>
           <InqField label="Anything else we should know?" colSpan={2}>
             <textarea className="field" value={form.details} onChange={e => set('details', e.target.value)}
-                      placeholder="Style, tone, specific requirements…"
+                      placeholder="Tell us about yourself, style, tone, specific requirements…"
                       style={{ width: '100%', height: 100, padding: 14, fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 15, resize: 'vertical' }} />
           </InqField>
         </div>
@@ -291,10 +301,10 @@ function Landing({ navigate, user, onSignIn, onSubmitInquiry }) {
           </div>
 
           <aside className="hero-anim" style={{ animationDelay: '0.2s', display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <Tile colors={['#0E0E0C', '#A88A4A']} monogram="OA" style={{ aspectRatio: '4/5' }} />
+            <Tile colors={['#0E0E0C', '#A88A4A']} src="https://images.unsplash.com/photo-1660675133902-acd1b057f75d?w=1200&q=80" style={{ aspectRatio: '4/5' }} />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Tile colors={['#5C1A2B', '#A88A4A']} style={{ aspectRatio: '1/1' }} />
-              <Tile colors={['#1a1612', '#C9A95F']} style={{ aspectRatio: '1/1' }} />
+              <Tile colors={['#5C1A2B', '#A88A4A']} src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=800&q=80" style={{ aspectRatio: '1/1' }} />
+              <Tile colors={['#1a1612', '#C9A95F']} src="https://images.unsplash.com/photo-1780542900375-0cf459e38fbb?w=800&q=80" style={{ aspectRatio: '1/1' }} />
             </div>
             <div style={{ borderTop: '0.5px solid var(--accent)', paddingTop: 14, fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ink-3)', display: 'flex', justifyContent: 'space-between' }}>
               <span>Pl. I — Frontispiece</span>

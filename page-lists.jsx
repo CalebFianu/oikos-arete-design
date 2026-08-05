@@ -23,12 +23,11 @@ function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onR
     <main className="page-fade">
       <section className="shell" style={{ paddingTop: 60, paddingBottom: 40 }}>
         <SectionMark num="III" label="Private Shortlists" />
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 40, alignItems: 'end', marginBottom: 24 }}>
+        <div style={{ marginBottom: 24 }}>
           <h1 className="display" style={{ fontSize: 'clamp(48px, 6vw, 84px)', margin: 0 }}>
             Your <em>shortlists.</em>
           </h1>
-          <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.55, margin: 0 }}>Build a list per event — keep your wedding vendors separate from your gala vendors. Each list collects the houses you mean to reach out to.
-
+          <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.55, margin: '20px 0 0', maxWidth: 520 }}>Build a list per event — keep your wedding vendors separate from your gala vendors. Each list collects the houses you mean to reach out to.
           </p>
         </div>
       </section>

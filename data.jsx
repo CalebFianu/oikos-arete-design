@@ -15,40 +15,41 @@ const EVENT_TYPES = [
   { id: 'private',    label: 'Private Gatherings',       num: '04', sub: 'Discreet, intimate, by invitation only.' },
   { id: 'anniversary',label: 'Anniversaries',            num: '05', sub: 'Quiet luxury, marked in years.' },
   { id: 'fundraiser', label: 'Fundraisers',              num: '06', sub: 'Galas, auctions, and cause-driven events.' },
+  { id: 'other',      label: 'Other',                    num: '07', sub: 'Something else entirely.' },
 ];
 
 const CITIES = ['Lagos', 'Abuja', 'Accra', 'Nairobi', 'Cape Town', 'Marrakech', 'Dubai', 'London', 'Paris', 'New York'];
 
 const VENDORS = [
   // Planners — 4 entries
-  { id: 'v01', name: 'Maison Adaeze',   cat: 'planners', city: 'Lagos',     tier: 3, rating: 4.9,  tags: ['weddings','luxury','destination'],    blurb: 'Full-service production for couture weddings and milestone galas. Twelve years of staging events that quietly become legend.', phone: '+233 56 004 8680', email: 'concierge@maisonadaeze.co', web: 'maisonadaeze.co',  ig: '@maisonadaeze',   tile: ['#1a1612','#a88a4a'] },
-  { id: 'v02', name: 'Ile Studio',      cat: 'planners', city: 'Accra',     tier: 2, rating: 4.7,  tags: ['corporate','intimate','minimal'],       blurb: 'A tightly-edited practice. We plan fewer events, more carefully.',                                                                phone: '+233 56 004 8680', email: 'studio@ile.events',         web: 'ile.events',      ig: '@ile.studio',     tile: ['#0e0e0c','#5C1A2B'] },
-  { id: 'v03', name: 'Atelier Verre',   cat: 'planners', city: 'Marrakech', tier: 3, rating: 4.95, tags: ['destination','weddings','heritage'],    blurb: 'Riads, ksour, and oases — staged for the discerning.',                                                                          phone: '+233 56 004 8680', email: 'salon@atelierverre.ma',    web: 'atelierverre.ma', ig: '@atelier.verre',  tile: ['#2a1810','#a88a4a'] },
-  { id: 'v23', name: 'Savanna & Co.',   cat: 'planners', city: 'Nairobi',   tier: 2, rating: 4.75, tags: ['corporate','weddings','east africa'],   blurb: 'Bespoke planning across the East African circuit. Safari lodges to Nairobi ballrooms — the same steady hand, wherever the occasion.', phone: '+233 56 004 8680', email: 'hello@savanna.co.ke',     web: 'savanna.co.ke',   ig: '@savanna.co',    tile: ['#1a1408','#8a6a28'] },
+  { id: 'v01', name: 'Maison Adaeze',   cat: 'planners', city: 'Lagos',     tier: 3, rating: 4.9,  tags: ['weddings','luxury','destination'],    blurb: 'Full-service production for couture weddings and milestone galas. Twelve years of staging events that quietly become legend.', phone: '+233 56 004 8680', email: 'concierge@maisonadaeze.co', web: 'maisonadaeze.co',  ig: '@maisonadaeze',   tile: ['#1a1612','#a88a4a'], image: 'https://images.unsplash.com/photo-1660675133902-acd1b057f75d?w=800&q=80' },
+  { id: 'v02', name: 'Ile Studio',      cat: 'planners', city: 'Accra',     tier: 2, rating: 4.7,  tags: ['corporate','intimate','minimal'],       blurb: 'A tightly-edited practice. We plan fewer events, more carefully.',                                                                phone: '+233 56 004 8680', email: 'studio@ile.events',         web: 'ile.events',      ig: '@ile.studio',     tile: ['#0e0e0c','#5C1A2B'], image: 'https://images.unsplash.com/photo-1695281536457-01f9a07c575b?w=800&q=80' },
+  { id: 'v03', name: 'Atelier Verre',   cat: 'planners', city: 'Marrakech', tier: 3, rating: 4.95, tags: ['destination','weddings','heritage'],    blurb: 'Riads, ksour, and oases — staged for the discerning.',                                                                          phone: '+233 56 004 8680', email: 'salon@atelierverre.ma',    web: 'atelierverre.ma', ig: '@atelier.verre',  tile: ['#2a1810','#a88a4a'], image: 'https://images.unsplash.com/photo-1618999114008-fbf937170cdb?w=800&q=80' },
+  { id: 'v23', name: 'Savanna & Co.',   cat: 'planners', city: 'Nairobi',   tier: 2, rating: 4.75, tags: ['corporate','weddings','east africa'],   blurb: 'Bespoke planning across the East African circuit. Safari lodges to Nairobi ballrooms — the same steady hand, wherever the occasion.', phone: '+233 56 004 8680', email: 'hello@savanna.co.ke',     web: 'savanna.co.ke',   ig: '@savanna.co',    tile: ['#1a1408','#8a6a28'], image: 'https://images.unsplash.com/photo-1661332517932-2d441bfb2994?w=800&q=80' },
 
   // Caterers — 4 entries
-  { id: 'v04', name: 'The Long Table',  cat: 'caterers', city: 'Lagos',     tier: 3, rating: 4.85, tags: ['fine dining','seasonal','tasting'],    blurb: 'Tasting-menu catering led by a former two-Michelin sous chef. Provenance traceable to the plate.',                               phone: '+233 56 004 8680', email: 'reservations@longtable.co', web: 'longtable.co',    ig: '@thelongtable',  tile: ['#3a1a22','#d4b06a'] },
-  { id: 'v05', name: 'Saffron & Smoke', cat: 'caterers', city: 'Dubai',     tier: 3, rating: 4.8,  tags: ['levantine','live fire','grand'],        blurb: 'Open-fire feasts and the gentlest spice. Always theatre.',                                                                         phone: '+233 56 004 8680',  email: 'book@saffronsmoke.ae',    web: 'saffronandsmoke.ae', ig: '@saffronandsmoke', tile: ['#1a0f0a','#c89544'] },
-  { id: 'v06', name: 'Mère & Fille',    cat: 'caterers', city: 'Paris',     tier: 3, rating: 4.92, tags: ['french','heritage','dessert'],          blurb: 'Two generations, one kitchen. Patisserie at the level of art objects.',                                                             phone: '+233 56 004 8680', email: 'concierge@mereetfille.fr', web: 'mereetfille.fr',  ig: '@mere.et.fille', tile: ['#2a1a1a','#b4894a'] },
-  { id: 'v07', name: 'Harvest Room',    cat: 'caterers', city: 'Cape Town', tier: 2, rating: 4.6,  tags: ['seasonal','farm','intimate'],           blurb: 'Farm-to-table for sit-down dinners up to 80.',                                                                                    phone: '+233 56 004 8680',  email: 'hello@harvestroom.za',    web: 'harvestroom.za',  ig: '@harvest.room',  tile: ['#1a1410','#9a7838'] },
+  { id: 'v04', name: 'The Long Table',  cat: 'caterers', city: 'Lagos',     tier: 3, rating: 4.85, tags: ['fine dining','seasonal','tasting'],    blurb: 'Tasting-menu catering led by a former two-Michelin sous chef. Provenance traceable to the plate.',                               phone: '+233 56 004 8680', email: 'reservations@longtable.co', web: 'longtable.co',    ig: '@thelongtable',  tile: ['#3a1a22','#d4b06a'], image: 'https://images.unsplash.com/photo-1592231167824-f3bf35eee521?w=800&q=80' },
+  { id: 'v05', name: 'Saffron & Smoke', cat: 'caterers', city: 'Dubai',     tier: 3, rating: 4.8,  tags: ['levantine','live fire','grand'],        blurb: 'Open-fire feasts and the gentlest spice. Always theatre.',                                                                         phone: '+233 56 004 8680',  email: 'book@saffronsmoke.ae',    web: 'saffronandsmoke.ae', ig: '@saffronandsmoke', tile: ['#1a0f0a','#c89544'], image: 'https://images.unsplash.com/photo-1576842546422-60562b9242ae?w=800&q=80' },
+  { id: 'v06', name: 'Mère & Fille',    cat: 'caterers', city: 'Paris',     tier: 3, rating: 4.92, tags: ['french','heritage','dessert'],          blurb: 'Two generations, one kitchen. Patisserie at the level of art objects.',                                                             phone: '+233 56 004 8680', email: 'concierge@mereetfille.fr', web: 'mereetfille.fr',  ig: '@mere.et.fille', tile: ['#2a1a1a','#b4894a'], image: 'https://images.unsplash.com/photo-1555244162-803834f70033?w=800&q=80' },
+  { id: 'v07', name: 'Harvest Room',    cat: 'caterers', city: 'Cape Town', tier: 2, rating: 4.6,  tags: ['seasonal','farm','intimate'],           blurb: 'Farm-to-table for sit-down dinners up to 80.',                                                                                    phone: '+233 56 004 8680',  email: 'hello@harvestroom.za',    web: 'harvestroom.za',  ig: '@harvest.room',  tile: ['#1a1410','#9a7838'], image: 'https://images.unsplash.com/photo-1463183547458-6a2c760d0912?w=800&q=80' },
 
   // Photo & Video — 4 entries
-  { id: 'v11', name: 'Folio by Idris',  cat: 'photo',    city: 'Lagos',     tier: 3, rating: 4.95, tags: ['wedding','documentary','film'],         blurb: 'Documentary photography that ages like a Magnum print.',                                                                          phone: '+233 56 004 8680', email: 'studio@folio.id',          web: 'folio.id',        ig: '@folio.idris',   tile: ['#0e0e0c','#a88a4a'] },
-  { id: 'v12', name: 'Northlight Co.',  cat: 'photo',    city: 'New York',  tier: 3, rating: 4.88, tags: ['editorial','corporate','film'],         blurb: 'Quiet observers with very expensive cameras.',                                                                                    phone: '+233 56 004 8680',  email: 'office@northlight.co',    web: 'northlight.co',   ig: '@northlight.co', tile: ['#1a1612','#9a7838'] },
-  { id: 'v13', name: 'Ode Cinema',      cat: 'photo',    city: 'Accra',     tier: 2, rating: 4.7,  tags: ['cinema','wedding','aerial'],            blurb: 'Cinematic films, scored bespoke. Six-week delivery.',                                                                              phone: '+233 56 004 8680', email: 'films@odecinema.gh',       web: 'odecinema.gh',    ig: '@ode.cinema',    tile: ['#2a1810','#b4894a'] },
-  { id: 'v24', name: 'Dusk Films',      cat: 'photo',    city: 'Cape Town', tier: 2, rating: 4.72, tags: ['documentary','natural light','wedding'], blurb: 'Two-person team — one shoots still, one shoots moving. The frames that matter are rarely the ones you posed for.',              phone: '+233 56 004 8680',  email: 'hello@duskfilms.za',      web: 'duskfilms.za',    ig: '@dusk.films',    tile: ['#0e1a1a','#3a7a7a'] },
+  { id: 'v11', name: 'Folio by Idris',  cat: 'photo',    city: 'Lagos',     tier: 3, rating: 4.95, tags: ['wedding','documentary','film'],         blurb: 'Documentary photography that ages like a Magnum print.',                                                                          phone: '+233 56 004 8680', email: 'studio@folio.id',          web: 'folio.id',        ig: '@folio.idris',   tile: ['#0e0e0c','#a88a4a'], image: 'https://images.unsplash.com/photo-1611093793031-46db535bde90?w=800&q=80' },
+  { id: 'v12', name: 'Northlight Co.',  cat: 'photo',    city: 'New York',  tier: 3, rating: 4.88, tags: ['editorial','corporate','film'],         blurb: 'Quiet observers with very expensive cameras.',                                                                                    phone: '+233 56 004 8680',  email: 'office@northlight.co',    web: 'northlight.co',   ig: '@northlight.co', tile: ['#1a1612','#9a7838'], image: 'https://images.unsplash.com/photo-1549981832-2ba2ee913334?w=800&q=80' },
+  { id: 'v13', name: 'Ode Cinema',      cat: 'photo',    city: 'Accra',     tier: 2, rating: 4.7,  tags: ['cinema','wedding','aerial'],            blurb: 'Cinematic films, scored bespoke. Six-week delivery.',                                                                              phone: '+233 56 004 8680', email: 'films@odecinema.gh',       web: 'odecinema.gh',    ig: '@ode.cinema',    tile: ['#2a1810','#b4894a'], image: 'https://images.unsplash.com/photo-1621024994278-e409544f4085?w=800&q=80' },
+  { id: 'v24', name: 'Dusk Films',      cat: 'photo',    city: 'Cape Town', tier: 2, rating: 4.72, tags: ['documentary','natural light','wedding'], blurb: 'Two-person team — one shoots still, one shoots moving. The frames that matter are rarely the ones you posed for.',              phone: '+233 56 004 8680',  email: 'hello@duskfilms.za',      web: 'duskfilms.za',    ig: '@dusk.films',    tile: ['#0e1a1a','#3a7a7a'], image: 'https://images.unsplash.com/photo-1570459061335-c3acc6926ab7?w=800&q=80' },
 
   // Decorators — 4 entries
-  { id: 'v14', name: 'Rosewood & Brass', cat: 'decor',  city: 'Lagos',     tier: 3, rating: 4.9,  tags: ['florals','tablescapes','installation'], blurb: 'Florals at the scale of architecture. Brass at the scale of jewellery.',                                                          phone: '+233 56 004 8680', email: 'concierge@rosewoodbrass.co', web: 'rosewoodbrass.co', ig: '@rosewoodbrass', tile: ['#3a1a22','#d4b06a'] },
-  { id: 'v15', name: 'Maison Verte',    cat: 'decor',    city: 'Paris',     tier: 3, rating: 4.85, tags: ['florals','european','heirloom'],        blurb: 'Heirloom blooms, sourced at dawn from Rungis.',                                                                                   phone: '+233 56 004 8680', email: 'salon@maisonverte.fr',     web: 'maisonverte.fr',  ig: '@maison.verte',  tile: ['#1a1612','#a88a4a'] },
-  { id: 'v16', name: 'The Setting',     cat: 'decor',    city: 'Nairobi',   tier: 2, rating: 4.6,  tags: ['installation','modern','minimal'],      blurb: 'Architectural decor for those who already have flowers.',                                                                          phone: '+233 56 004 8680', email: 'office@thesetting.ke',    web: 'thesetting.ke',   ig: '@the.setting',   tile: ['#0e0e0c','#5C1A2B'] },
-  { id: 'v25', name: 'Atelier Bloom',   cat: 'decor',    city: 'Accra',     tier: 2, rating: 4.65, tags: ['florals','botanical','intimate'],        blurb: 'Locally sourced botanicals arranged with a deliberate hand. Every table built as though it will be painted before it is sat at.', phone: '+233 56 004 8680', email: 'studio@atelierbloom.gh',  web: 'atelierbloom.gh', ig: '@atelier.bloom', tile: ['#0a1810','#4a8050'] },
+  { id: 'v14', name: 'Rosewood & Brass', cat: 'decor',  city: 'Lagos',     tier: 3, rating: 4.9,  tags: ['florals','tablescapes','installation'], blurb: 'Florals at the scale of architecture. Brass at the scale of jewellery.',                                                          phone: '+233 56 004 8680', email: 'concierge@rosewoodbrass.co', web: 'rosewoodbrass.co', ig: '@rosewoodbrass', tile: ['#3a1a22','#d4b06a'], image: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=800&q=80' },
+  { id: 'v15', name: 'Maison Verte',    cat: 'decor',    city: 'Paris',     tier: 3, rating: 4.85, tags: ['florals','european','heirloom'],        blurb: 'Heirloom blooms, sourced at dawn from Rungis.',                                                                                   phone: '+233 56 004 8680', email: 'salon@maisonverte.fr',     web: 'maisonverte.fr',  ig: '@maison.verte',  tile: ['#1a1612','#a88a4a'], image: 'https://images.unsplash.com/photo-1525441273400-056e9c7517b3?w=800&q=80' },
+  { id: 'v16', name: 'The Setting',     cat: 'decor',    city: 'Nairobi',   tier: 2, rating: 4.6,  tags: ['installation','modern','minimal'],      blurb: 'Architectural decor for those who already have flowers.',                                                                          phone: '+233 56 004 8680', email: 'office@thesetting.ke',    web: 'thesetting.ke',   ig: '@the.setting',   tile: ['#0e0e0c','#5C1A2B'], image: 'https://images.unsplash.com/photo-1605477758687-973ba14c43b1?w=800&q=80' },
+  { id: 'v25', name: 'Atelier Bloom',   cat: 'decor',    city: 'Accra',     tier: 2, rating: 4.65, tags: ['florals','botanical','intimate'],        blurb: 'Locally sourced botanicals arranged with a deliberate hand. Every table built as though it will be painted before it is sat at.', phone: '+233 56 004 8680', email: 'studio@atelierbloom.gh',  web: 'atelierbloom.gh', ig: '@atelier.bloom', tile: ['#0a1810','#4a8050'], image: 'https://images.unsplash.com/photo-1676734627786-a3662ff6a243?w=800&q=80' },
 
   // DJs / MCs — 4 entries (merged from former djs + mcs categories)
-  { id: 'v17', name: 'DJ Kola',          cat: 'sound',   city: 'Lagos',     tier: 3, rating: 4.92, tags: ['afrobeats','house','wedding'],          blurb: 'Reads a room before walking into it. Twelve-hour sets without fatigue.',                                                           phone: '+233 56 004 8680', email: 'bookings@kola.fm',        web: 'kola.fm',         ig: '@dj.kola',       tile: ['#0e0e0c','#a88a4a'] },
-  { id: 'v18', name: 'Selectah Ré',      cat: 'sound',   city: 'Abuja',     tier: 2, rating: 4.7,  tags: ['soul','classics','intimate'],           blurb: 'Vinyl-first. Soul, jazz, lover\u2019s rock. Dinner-to-dancefloor specialist.',                                                   phone: '+233 56 004 8680', email: 'mgmt@selectah-re.com',   web: 'selectah-re.com', ig: '@selectah.re',   tile: ['#3a1a22','#c89544'] },
-  { id: 'v19', name: 'Olu Adesanya',     cat: 'sound',   city: 'Lagos',     tier: 3, rating: 4.9,  tags: ['bilingual','formal','warm'],            blurb: 'Hosts in three languages, never overstays the moment.',                                                                           phone: '+233 56 004 8680', email: 'mgmt@oluadesanya.co',    web: 'oluadesanya.co',  ig: '@olu.adesanya',  tile: ['#1a1612','#9a7838'] },
-  { id: 'v20', name: 'Ms. Adwoa Mensah', cat: 'sound',   city: 'Accra',     tier: 2, rating: 4.75, tags: ['corporate','english','french'],         blurb: 'Corporate hosting with a vanishingly light touch.',                                                                               phone: '+233 56 004 8680', email: 'hello@adwoa.co',          web: 'adwoa.co',        ig: '@adwoa.host',    tile: ['#2a1810','#b4894a'] },
+  { id: 'v17', name: 'DJ Kola',          cat: 'sound',   city: 'Lagos',     tier: 3, rating: 4.92, tags: ['afrobeats','house','wedding'],          blurb: 'Reads a room before walking into it. Twelve-hour sets without fatigue.',                                                           phone: '+233 56 004 8680', email: 'bookings@kola.fm',        web: 'kola.fm',         ig: '@dj.kola',       tile: ['#0e0e0c','#a88a4a'], image: 'https://images.unsplash.com/photo-1684253866485-b26f847ff97e?w=800&q=80' },
+  { id: 'v18', name: 'Selectah Ré',      cat: 'sound',   city: 'Abuja',     tier: 2, rating: 4.7,  tags: ['soul','classics','intimate'],           blurb: 'Vinyl-first. Soul, jazz, lover\u2019s rock. Dinner-to-dancefloor specialist.',                                                   phone: '+233 56 004 8680', email: 'mgmt@selectah-re.com',   web: 'selectah-re.com', ig: '@selectah.re',   tile: ['#3a1a22','#c89544'], image: 'https://images.unsplash.com/photo-1665258918932-9e358bcfba0f?w=800&q=80' },
+  { id: 'v19', name: 'Olu Adesanya',     cat: 'sound',   city: 'Lagos',     tier: 3, rating: 4.9,  tags: ['bilingual','formal','warm'],            blurb: 'Hosts in three languages, never overstays the moment.',                                                                           phone: '+233 56 004 8680', email: 'mgmt@oluadesanya.co',    web: 'oluadesanya.co',  ig: '@olu.adesanya',  tile: ['#1a1612','#9a7838'], image: 'https://images.unsplash.com/photo-1661332306744-70f9ed1a7f40?w=800&q=80' },
+  { id: 'v20', name: 'Ms. Adwoa Mensah', cat: 'sound',   city: 'Accra',     tier: 2, rating: 4.75, tags: ['corporate','english','french'],         blurb: 'Corporate hosting with a vanishingly light touch.',                                                                               phone: '+233 56 004 8680', email: 'hello@adwoa.co',          web: 'adwoa.co',        ig: '@adwoa.host',    tile: ['#2a1810','#b4894a'], image: 'https://images.unsplash.com/photo-1624695759524-0c4e69c5f51a?w=800&q=80' },
 ];
 
 const VENUES = [
@@ -68,7 +69,13 @@ const VENUES = [
     blurb: 'A grand hall of colonial lineage, restored to its original geometry. The ceiling height alone commands presence — and the room remembers every occasion held within it.',
     tags: ['weddings', 'galas', 'luxury', 'air-conditioned'],
     tile: ['#1a1612', '#a88a4a'],
-    images: [['#1a1612','#a88a4a'],['#2a1810','#c8a462'],['#0e0e0c','#b4894a'],['#3a2a18','#d4b06a'],['#1a1008','#a08040']],
+    images: [
+      'https://images.unsplash.com/photo-1780542900375-0cf459e38fbb?w=1200&q=80',
+      'https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200&q=80',
+      'https://images.unsplash.com/photo-1780383908348-66fe35ee95cf?w=1200&q=80',
+      'https://images.unsplash.com/photo-1775346098928-cab0ac41b9a2?w=1200&q=80',
+      'https://images.unsplash.com/photo-1559753217-bbb7d4ffc9d5?w=1200&q=80',
+    ],
   },
   {
     id: 'vn02',
@@ -86,7 +93,13 @@ const VENUES = [
     blurb: 'A walled estate of considerable acreage, available for full exclusive use. Gardens, terraces, and a principal hall — composed entirely for ceremony.',
     tags: ['exclusive', 'outdoor', 'destination', 'heritage'],
     tile: ['#0f1a0f', '#6a8a4a'],
-    images: [['#0f1a0f','#6a8a4a'],['#182818','#7a9a58'],['#0a140a','#5a7a3a'],['#1e2e1e','#8aaa68'],['#121e12','#708850']],
+    images: [
+      'https://images.unsplash.com/photo-1690332536800-92ec96b53184?w=1200&q=80',
+      'https://images.unsplash.com/photo-1730660338791-8d63548efc75?w=1200&q=80',
+      'https://images.unsplash.com/photo-1766603636725-9155e783168a?w=1200&q=80',
+      'https://images.unsplash.com/photo-1676649901307-3e8ae63d42f0?w=1200&q=80',
+      'https://images.unsplash.com/photo-1660740220701-3612091dd6db?w=1200&q=80',
+    ],
   },
   {
     id: 'vn03',
@@ -104,7 +117,13 @@ const VENUES = [
     blurb: 'Lush garden grounds framed by mature trees and a curated landscape. Ideal for twilight receptions and ceremonies held under open Accra skies.',
     tags: ['garden', 'outdoor', 'intimate', 'twilight'],
     tile: ['#0a1408', '#4a7a2a'],
-    images: [['#0a1408','#4a7a2a'],['#0e200e','#5a8a38'],['#081008','#3a6a20'],['#162816','#6a9a50'],['#0c1c0c','#508040']],
+    images: [
+      'https://images.unsplash.com/photo-1514053026555-49ce8886ae41?w=1200&q=80',
+      'https://images.unsplash.com/photo-1726595453606-4bc89a700f59?w=1200&q=80',
+      'https://images.unsplash.com/photo-1770824906466-6254ca2cdc14?w=1200&q=80',
+      'https://images.unsplash.com/photo-1676649901307-3e8ae63d42f0?w=1200&q=80',
+      'https://images.unsplash.com/photo-1745979425724-a1243574e4c6?w=1200&q=80',
+    ],
   },
   {
     id: 'vn04',
@@ -122,7 +141,13 @@ const VENUES = [
     blurb: 'Accra at eye level, framed by sunset and the Atlantic horizon. A contemporary event space for those who prefer the city itself as backdrop.',
     tags: ['rooftop', 'sunset', 'contemporary', 'cocktail'],
     tile: ['#0a0c1a', '#4a5a8a'],
-    images: [['#0a0c1a','#4a5a8a'],['#10122a','#5a6a9a'],['#08081a','#3a4a7a'],['#12142c','#6a7aaa'],['#0c0e22','#505888']],
+    images: [
+      'https://images.unsplash.com/photo-1780542785051-2e320486c71d?w=1200&q=80',
+      'https://images.unsplash.com/photo-1776671069226-24e6d422a61b?w=1200&q=80',
+      'https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200&q=80',
+      'https://images.unsplash.com/photo-1729957385579-528ce50ffd94?w=1200&q=80',
+      'https://images.unsplash.com/photo-1592654365675-f3c799bf0196?w=1200&q=80',
+    ],
   },
   {
     id: 'vn05',
@@ -140,7 +165,13 @@ const VENUES = [
     blurb: 'A purpose-built event hall within one of Accra\'s most acclaimed hospitality houses. Full in-house catering, technical production, and AV available on request.',
     tags: ['hotel', 'conferences', 'galas', 'full-service'],
     tile: ['#1a0a0a', '#8a3a2a'],
-    images: [['#1a0a0a','#8a3a2a'],['#2a1010','#9a4838'],['#120808','#7a2a20'],['#1e1212','#a05040'],['#160c0c','#8a3e30']],
+    images: [
+      'https://images.unsplash.com/photo-1765308767818-1e7fd17c8067?w=1200&q=80',
+      'https://images.unsplash.com/photo-1778577192278-5ee102df055a?w=1200&q=80',
+      'https://images.unsplash.com/photo-1775601258812-b8d41b699eab?w=1200&q=80',
+      'https://images.unsplash.com/photo-1780542900375-0cf459e38fbb?w=1200&q=80',
+      'https://images.unsplash.com/photo-1727931301188-55b23fa9672e?w=1200&q=80',
+    ],
   },
   {
     id: 'vn06',
@@ -158,7 +189,13 @@ const VENUES = [
     blurb: 'A walled garden anchored by a century-old baobab. Private, hushed, and entirely distinct — no two events feel alike beneath this canopy.',
     tags: ['intimate', 'garden', 'heritage-tree', 'boutique'],
     tile: ['#180e08', '#7a5a28'],
-    images: [['#180e08','#7a5a28'],['#221810','#8a6a38'],['#120c06','#6a4a18'],['#1e1810','#906230'],['#160e08','#705820']],
+    images: [
+      'https://images.unsplash.com/photo-1514053026555-49ce8886ae41?w=1200&q=80',
+      'https://images.unsplash.com/photo-1660740220701-3612091dd6db?w=1200&q=80',
+      'https://images.unsplash.com/photo-1726595453606-4bc89a700f59?w=1200&q=80',
+      'https://images.unsplash.com/photo-1658157500744-d348c9a0f760?w=1200&q=80',
+      'https://images.unsplash.com/photo-1565987012695-e0da407f308d?w=1200&q=80',
+    ],
   },
   {
     id: 'vn07',
@@ -176,7 +213,13 @@ const VENUES = [
     blurb: 'Accra\'s most expansive private event estate. Ballroom, garden pavilion, and a full outdoor stage — composable for events of any scale or format.',
     tags: ['luxury', 'large-scale', 'exclusive', 'pavilion'],
     tile: ['#1a0e18', '#8a4a78'],
-    images: [['#1a0e18','#8a4a78'],['#221820','#9a5a88'],['#120c10','#7a3a68'],['#1e1622','#a06090'],['#161018','#805878']],
+    images: [
+      'https://images.unsplash.com/photo-1775346098928-cab0ac41b9a2?w=1200&q=80',
+      'https://images.unsplash.com/photo-1780542900375-0cf459e38fbb?w=1200&q=80',
+      'https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200&q=80',
+      'https://images.unsplash.com/photo-1780383908348-66fe35ee95cf?w=1200&q=80',
+      'https://images.unsplash.com/photo-1780385560539-c27d691a475e?w=1200&q=80',
+    ],
   },
   {
     id: 'vn08',
@@ -194,7 +237,13 @@ const VENUES = [
     blurb: 'A mid-century estate of generous proportions and quiet character. Pool terrace, library garden, and an exceptional main hall for seated dinners.',
     tags: ['villa', 'pool', 'seated-dining', 'mid-century'],
     tile: ['#0a1418', '#3a6a7a'],
-    images: [['#0a1418','#3a6a7a'],['#101c22','#4a7a8a'],['#080e12','#2a5a6a'],['#12202a','#5a8a9a'],['#0c1820','#406878']],
+    images: [
+      'https://images.unsplash.com/photo-1766603636725-9155e783168a?w=1200&q=80',
+      'https://images.unsplash.com/photo-1690332536800-92ec96b53184?w=1200&q=80',
+      'https://images.unsplash.com/photo-1674292517113-c9ad69d35350?w=1200&q=80',
+      'https://images.unsplash.com/photo-1660898923894-3fee9043c551?w=1200&q=80',
+      'https://images.unsplash.com/photo-1676649901307-3e8ae63d42f0?w=1200&q=80',
+    ],
   },
 ];
 
