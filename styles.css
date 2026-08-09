@@ -453,6 +453,56 @@ html { scroll-behavior: smooth; }
   .event-detail-strip > div:nth-child(even) { padding-left: 20px !important; border-left: 0.5px solid var(--rule) !important; }
 }
 
+/* ── FAB (floating action button) ────────────────────────── */
+.fab-wrap {
+  position: fixed; bottom: 32px; right: 32px; z-index: 90;
+  display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 12px;
+}
+.fab-trigger {
+  width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent); color: #fff; border: none;
+  box-shadow: 0 6px 24px rgba(0,0,0,.18);
+  cursor: pointer; transition: transform .25s, background .2s, box-shadow .25s;
+}
+.fab-trigger:hover { background: var(--accent-deep); box-shadow: 0 8px 32px rgba(0,0,0,.24); }
+.fab-trigger svg { transition: transform .3s cubic-bezier(.4,0,.2,1); }
+.fab-trigger.open svg { transform: rotate(45deg); }
+
+.fab-menu {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+  pointer-events: none; opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .22s, transform .22s;
+}
+.fab-menu.visible { pointer-events: auto; opacity: 1; transform: translateY(0); }
+
+.fab-item {
+  display: flex; align-items: center; gap: 10px;
+  height: 40px; padding: 0 16px 0 14px;
+  background: var(--paper); border: 0.5px solid var(--rule-strong);
+  color: var(--ink); cursor: pointer;
+  font: 500 11px/1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  transition: border-color .2s, color .2s;
+  text-decoration: none;
+}
+.fab-item:hover { border-color: var(--accent); color: var(--accent); }
+
+.fab-note-panel {
+  position: fixed; bottom: 96px; right: 32px; z-index: 91;
+  width: 380px; max-width: calc(100vw - 48px);
+  background: var(--paper); border: 0.5px solid var(--accent);
+  box-shadow: 0 12px 48px rgba(0,0,0,.14);
+  animation: pageFade .25s ease;
+}
+
+@media (max-width: 720px) {
+  .fab-wrap { bottom: 20px; right: 20px; }
+  .fab-note-panel { right: 20px; bottom: 84px; }
+}
+
 /* ── Reduced-motion safety ───────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .hero-anim, .reveal, .reveal-left, .reveal-right, .reveal-scale {

@@ -59,6 +59,109 @@ function useHashRoute() {
   return hash;
 }
 
+// ── Floating Action Button ──────────────────────────────────────────
+function QuickActions({ lists, onAddNote, user, onSignIn }) {
+  const [open, setOpen] = React.useState(false);
+  const [noteOpen, setNoteOpen] = React.useState(false);
+  const [noteListId, setNoteListId] = React.useState('');
+  const [noteText, setNoteText] = React.useState('');
+
+  // Pick first list as default when opening
+  const openNotePanel = () => {
+    if (!user) { onSignIn(); return; }
+    setNoteListId(lists[0]?.id || '');
+    setNoteText('');
+    setNoteOpen(true);
+    setOpen(false);
+  };
+
+  const saveQuickNote = () => {
+    if (noteText.trim() && noteListId) {
+      onAddNote(noteListId, noteText.trim());
+      setNoteOpen(false);
+      setNoteText('');
+    }
+  };
+
+  return (
+    <>
+      {/* Quick-note panel */}
+      {noteOpen && (
+        <div className="fab-note-panel">
+          <div style={{ padding: '20px 22px 0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <span className="mono" style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--accent)' }}>Quick note</span>
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-3)', padding: 4 }}
+                onClick={() => setNoteOpen(false)}>
+                <Icon name="x" size={16} />
+              </button>
+            </div>
+            <label className="field-label">Save to list</label>
+            <select value={noteListId} onChange={(e) => setNoteListId(e.target.value)}
+              style={{
+                width: '100%', height: 44, padding: '0 12px',
+                background: 'transparent', border: '0.5px solid var(--rule-strong)',
+                color: 'var(--ink)', fontFamily: 'var(--sans)', fontSize: 14,
+                outline: 'none', borderRadius: 0, appearance: 'none',
+                cursor: 'pointer'
+              }}>
+              {lists.map((l) => (
+                <option key={l.id} value={l.id}>{l.name}</option>
+              ))}
+            </select>
+          </div>
+          <div style={{ padding: '14px 22px 22px' }}>
+            <textarea autoFocus value={noteText} onChange={(e) => setNoteText(e.target.value)}
+              placeholder="What's on your mind?"
+              style={{
+                width: '100%', minHeight: 90, padding: 12,
+                border: '0.5px solid var(--rule-strong)', background: 'transparent',
+                color: 'var(--ink)', fontFamily: 'var(--sans)', fontSize: 14,
+                lineHeight: 1.6, resize: 'vertical', outline: 'none', borderRadius: 0
+              }} />
+            <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
+              <button className="btn gold"
+                disabled={!noteText.trim() || !noteListId}
+                style={{ height: 36, padding: '0 16px', fontSize: 11, opacity: (noteText.trim() && noteListId) ? 1 : 0.4 }}
+                onClick={saveQuickNote}>
+                Save note
+              </button>
+              <button className="btn ghost" style={{ height: 36, padding: '0 16px', fontSize: 11 }}
+                onClick={() => setNoteOpen(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FAB */}
+      <div className="fab-wrap">
+        <button className={'fab-trigger' + (open ? ' open' : '')}
+          onClick={() => { setOpen((o) => !o); if (noteOpen) setNoteOpen(false); }}
+          aria-label="Quick actions">
+          <Icon name="plus" size={22} stroke={2} />
+        </button>
+
+        <div className={'fab-menu' + (open ? ' visible' : '')}>
+          <button className="fab-item" onClick={openNotePanel}>
+            <Icon name="edit" size={14} /> Quick note
+          </button>
+          <a className="fab-item" href="#/lists" onClick={() => setOpen(false)}>
+            <Icon name="list" size={14} /> Shortlists
+          </a>
+          <a className="fab-item" href="#/browse" onClick={() => setOpen(false)}>
+            <Icon name="search" size={14} /> Browse vendors
+          </a>
+          <a className="fab-item" href="#/venues" onClick={() => setOpen(false)}>
+            <Icon name="pin" size={14} /> Browse venues
+          </a>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const auth = useAuth();
@@ -167,6 +270,19 @@ function App() {
     setLists((prev) => prev.map((l) => l.id === listId ? { ...l, vendorIds: l.vendorIds.filter((x) => x !== vendorId) } : l));
   };
 
+  const addNote = (listId, text) => {
+    const note = { id: 'n' + Date.now().toString(36), text, createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) };
+    setLists((prev) => prev.map((l) => l.id === listId ? { ...l, notes: [...(l.notes || []), note] } : l));
+    showToast('Note added');
+  };
+  const updateNote = (listId, noteId, text) => {
+    setLists((prev) => prev.map((l) => l.id === listId ? { ...l, notes: (l.notes || []).map((n) => n.id === noteId ? { ...n, text } : n) } : l));
+  };
+  const deleteNote = (listId, noteId) => {
+    setLists((prev) => prev.map((l) => l.id === listId ? { ...l, notes: (l.notes || []).filter((n) => n.id !== noteId) } : l));
+    showToast('Note removed');
+  };
+
   const saveVendor = (v) => {
     setVendors((prev) => {
       const idx = prev.findIndex((x) => x.id === v.id);
@@ -259,6 +375,7 @@ function App() {
       page = <Lists lists={lists} favorites={favorites}
                     onCreateList={createList} onRenameList={renameList}
                     onDeleteList={deleteList} onRemoveFromList={removeFromList}
+                    onAddNote={addNote} onUpdateNote={updateNote} onDeleteNote={deleteNote}
                     onOpenVendor={(id) => window.location.hash = `#/vendor/${id}`} />;
     }
   } else if (route.startsWith('/venues')) {
@@ -318,6 +435,9 @@ function App() {
           onSignIn={(c) => { auth.signIn(c); setTimeout(() => authPrompt.then?.(), 0); }}
           onSignUp={(c) => { auth.signUp(c); setTimeout(() => authPrompt.then?.(), 0); }} />
       )}
+
+      <QuickActions lists={lists} onAddNote={addNote}
+        user={auth.user} onSignIn={() => setAuthPrompt({ mode: 'signin', message: 'Sign in to save notes to your shortlists.' })} />
 
       {toast && <div className="toast">{toast}</div>}
 

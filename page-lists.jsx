@@ -1,14 +1,25 @@
 // Lists — named shortlists per event
 
-function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onRemoveFromList, onOpenVendor }) {
+function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onRemoveFromList, onAddNote, onUpdateNote, onDeleteNote, onOpenVendor }) {
   const [activeId, setActiveId] = React.useState(lists[0]?.id || null);
   const [creating, setCreating] = React.useState(false);
   const [newName, setNewName] = React.useState('');
   const [renaming, setRenaming] = React.useState(null);
+  const [addingNote, setAddingNote] = React.useState(false);
+  const [noteText, setNoteText] = React.useState('');
+  const [editingNote, setEditingNote] = React.useState(null);
+  const [deletingNote, setDeletingNote] = React.useState(null);
 
   React.useEffect(() => {
     if (!lists.find((l) => l.id === activeId)) setActiveId(lists[0]?.id || null);
   }, [lists]);
+
+  React.useEffect(() => {
+    setAddingNote(false);
+    setNoteText('');
+    setEditingNote(null);
+    setDeletingNote(null);
+  }, [activeId]);
 
   const active = lists.find((l) => l.id === activeId);
   const activeItems = active ? active.vendorIds.map((id) => {
@@ -142,6 +153,91 @@ function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onR
                       </div>
                     </div>
               }
+
+                  {/* ── Notes ──────────────────────────────────── */}
+                  <div style={{ marginTop: 56, borderTop: '0.5px solid var(--rule)', paddingTop: 32 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                      <div>
+                        <span className="mono" style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--accent)' }}>Notes</span>
+                        <h3 className="serif" style={{ fontSize: 24, fontWeight: 500, margin: '6px 0 0' }}>Your thoughts</h3>
+                      </div>
+                      {!addingNote && (
+                        <button className="btn ghost" style={{ height: 36, padding: '0 16px', fontSize: 11 }}
+                          onClick={() => { setAddingNote(true); setNoteText(''); }}>
+                          <Icon name="plus" size={12} /> Add note
+                        </button>
+                      )}
+                    </div>
+
+                    {addingNote && (
+                      <div style={{ marginBottom: 24, border: '0.5px solid var(--accent)', padding: 20, background: 'var(--paper)' }}>
+                        <textarea autoFocus value={noteText} onChange={(e) => setNoteText(e.target.value)}
+                          placeholder="Jot down a thought — budget ideas, questions for a vendor, a colour palette you liked..."
+                          style={{
+                            width: '100%', minHeight: 100, padding: 12, border: '0.5px solid var(--rule-strong)',
+                            background: 'transparent', color: 'var(--ink)', fontFamily: 'var(--sans)', fontSize: 14,
+                            lineHeight: 1.6, resize: 'vertical', outline: 'none', borderRadius: 0
+                          }} />
+                        <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+                          <button className="btn gold"
+                            disabled={!noteText.trim()}
+                            style={{ height: 36, padding: '0 16px', fontSize: 11, opacity: noteText.trim() ? 1 : 0.4 }}
+                            onClick={() => { if (noteText.trim()) { onAddNote(active.id, noteText.trim()); setNoteText(''); setAddingNote(false); } }}>
+                            Save note
+                          </button>
+                          <button className="btn ghost" style={{ height: 36, padding: '0 16px', fontSize: 11 }}
+                            onClick={() => { setAddingNote(false); setNoteText(''); }}>
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {(active.notes || []).length === 0 && !addingNote ? (
+                      <div style={{ padding: '32px 0', textAlign: 'center' }}>
+                        <p style={{ color: 'var(--ink-4)', fontSize: 14, fontStyle: 'italic', margin: 0 }}>
+                          No notes yet. Capture your thoughts as you plan.
+                        </p>
+                      </div>
+                    ) : (
+                      <div>
+                        {(active.notes || []).map((note) => (
+                          <div key={note.id} style={{ padding: '18px 0', borderBottom: '0.5px solid var(--rule)' }}>
+                            {editingNote === note.id ? (
+                              <div>
+                                <textarea autoFocus value={note.text}
+                                  onChange={(e) => onUpdateNote(active.id, note.id, e.target.value)}
+                                  style={{
+                                    width: '100%', minHeight: 80, padding: 12, border: '0.5px solid var(--accent)',
+                                    background: 'transparent', color: 'var(--ink)', fontFamily: 'var(--sans)', fontSize: 14,
+                                    lineHeight: 1.6, resize: 'vertical', outline: 'none', borderRadius: 0
+                                  }} />
+                                <button className="btn-text" style={{ fontSize: 11, marginTop: 10 }}
+                                  onClick={() => setEditingNote(null)}>
+                                  Done
+                                </button>
+                              </div>
+                            ) : (
+                              <div>
+                                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.65, color: 'var(--ink-2)', whiteSpace: 'pre-wrap' }}>{note.text}</p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 10 }}>
+                                  <span className="mono" style={{ fontSize: 10, letterSpacing: '0.18em', color: 'var(--ink-4)' }}>{note.createdAt}</span>
+                                  <button className="icon-btn" style={{ width: 28, height: 28 }} aria-label="Edit note"
+                                    onClick={() => setEditingNote(note.id)}>
+                                    <Icon name="edit" size={12} />
+                                  </button>
+                                  <button className="icon-btn" style={{ width: 28, height: 28 }} aria-label="Delete note"
+                                    onClick={() => setDeletingNote(note.id)}>
+                                    <Icon name="trash" size={12} />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </>
             }
             </div>
@@ -167,6 +263,25 @@ function Lists({ lists, favorites, onCreateList, onRenameList, onDeleteList, onR
                 Create list <Icon name="arrow" size={13} />
               </button>
               <button className="btn ghost" onClick={() => setCreating(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      }
+
+      {deletingNote && active &&
+      <div className="modal-backdrop" onClick={() => setDeletingNote(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="eyebrow eyebrow-gold">— Confirm —</div>
+            <h3>Delete this note?</h3>
+            <p style={{ color: 'var(--ink-3)', fontSize: 14, lineHeight: 1.5, margin: '0 0 24px' }}>
+              This note will be permanently removed from <strong>{active.name}</strong>. This action cannot be undone.
+            </p>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button className="btn" style={{ background: 'var(--burgundy)', borderColor: 'var(--burgundy)', color: '#fff' }}
+                onClick={() => { onDeleteNote(active.id, deletingNote); setDeletingNote(null); }}>
+                Delete note
+              </button>
+              <button className="btn ghost" onClick={() => setDeletingNote(null)}>Cancel</button>
             </div>
           </div>
         </div>
